@@ -1,0 +1,26 @@
+{
+  "name": "mern_audio_chat",
+  "version": "1.0.0",
+  "description": "A real-time audio chat application built with React, Node.js, Express, MongoDB, and Socket.IO.",
+  "main": "index.js",
+ "scripts": {
+  "start": "node server/index.js", 
+  "client": "cd client && npm start",  
+  "dev": "concurrently \"npm run start\" \"npm run client\""  
+}
+,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laiba54678/Audio_Chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laiba54678/Audio_Chat/issues"
+  },
+  "homepage": "https://github.com/laiba54678/Audio_Chat#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
