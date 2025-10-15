@@ -4,7 +4,7 @@
   "description": "A real-time audio chat application built with React, Node.js, Express, MongoDB, and Socket.IO.",
   "main": "index.js",
  "scripts": {
-  "start": "node server/index.js", 
+  "start": "node server/server.js", 
   "client": "cd client && npm start",  
   "dev": "concurrently \"npm run start\" \"npm run client\""  
 }

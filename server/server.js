@@ -20,7 +20,12 @@ const server = http.createServer(app);
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: config.corsOrigin,
+    origin: [
+      'https://audio-chat-xxhg.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001',
+      config.corsOrigin
+    ].filter(Boolean),
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -31,18 +36,40 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: config.nodeEnv === 'development' ? true : config.corsOrigin,
+  origin: [
+    'https://audio-chat-xxhg.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:3001',
+    config.corsOrigin
+  ].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware
+// Request logging middleware (before JSON parsing)
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
-  if (req.method === 'POST' && req.path.includes('/auth/register')) {
+  next();
+});
+
+// JSON parsing middleware with error handling
+app.use(express.json({ 
+  limit: '10mb',
+  verify: (req, res, buf) => {
+    try {
+      JSON.parse(buf);
+    } catch (e) {
+      console.error('Invalid JSON received:', buf.toString());
+      throw new Error('Invalid JSON format');
+    }
+  }
+}));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Request body logging middleware (after JSON parsing)
+app.use((req, res, next) => {
+  if (req.method === 'POST' && req.path.includes('/auth/')) {
     console.log('Request body:', req.body);
     console.log('Request headers:', req.headers);
   }
